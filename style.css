@@ -1,0 +1,123 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body, html{
+    height: 100%;
+    width: 1200px;
+    background-color: whitesmoke;
+    margin: auto;
+}
+
+
+::selection {
+    background-color: green;
+    color: yellow;
+  }
+
+h1{
+    margin: auto;
+    font-size: 130px;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url(https://i.pinimg.com/564x/ba/d7/00/bad7004e3e1e4af71d6bcfb135c0eef7.jpg);
+    background-clip: text;
+    color: transparent;
+}
+
+.headerContainer{
+    width: 90%;
+    height: 400px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding-top: 130px;
+    border-radius: 30px;
+    background-image: url(https://img.freepik.com/free-photo/factory-producing-co2-pollution_23-2150858189.jpg?t=st=1730649575~exp=1730653175~hmac=4290df4d5cfbd3a763ad8778e48c129a4777fb92b5f39326d843e5cbeccf57e8&w=740);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+#formForStart{
+    width: 50%;
+    margin: auto;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid gray;
+    border-radius: 10px;
+}
+
+#formForStart input{
+    width: 50%;
+    padding: 0px 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#formForStart button{
+    height: 30px;
+    width: 20%;
+}
+
+#container{
+    margin: auto;
+    max-width: 70%;
+    min-width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+}
+
+.card{
+    flex:  0 1 20%;
+    height: 156px;
+    font-size: 32px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.card .frontSide, .card .backSide{
+    width: 156px;
+    height: 156px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: absolute;
+
+    backface-visibility: hidden;
+    transition: 800ms;
+}
+
+.card .frontSide img{
+    width: 156px;
+    height: 156px;
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
+}
+
+.backSide{
+    padding: 57px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid black;
+    transform: rotateY(180deg);
+}
+
+.opend{
+    background-color: grey;
+}
+
+.success{
+    background-color: green;
+}
+
+.wrong{
+    background-color: rgb(139, 0, 0);
+}
