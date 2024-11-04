@@ -60,7 +60,6 @@ function startGame(count) {
             backSide.style.transform = 'rotateY(360deg)';
 
         // Проверка не кликали ли мы уже на эту карту,  если нет тогда будет код выполнятся дальше - иначе стоп
-            console.log(e.target)
             if(e.target.classList.contains('opend')||e.target.classList.contains('success')||e.target.classList.contains('card')){
                 return
             }else{
@@ -84,6 +83,7 @@ function startGame(count) {
                         elem[1].classList.add('success');
                         elem[0].classList.remove('opend');
                         elem[1].classList.remove('opend');
+                        checkWin();
                         //Затираем наши значения для того что бы играть далее
                         clickCounter=0;
                         numberTwo=numberOne=-1;
@@ -91,6 +91,7 @@ function startGame(count) {
                          //отображаем что выбор не верный
                         elem[0].classList.add('wrong');
                         elem[1].classList.add('wrong');
+                        document.getElementById('container').style.pointerEvents = 'none';
                         setTimeout(()=>{
                         // Прерворачиваем наши карточки обратно в закрытое состояние
                             elem[0].style.transform = 'rotateY(180deg)';
@@ -102,6 +103,7 @@ function startGame(count) {
                             elem[1].classList.remove('opend');
                             elem[0].classList.remove('wrong');
                             elem[1].classList.remove('wrong');
+                            document.getElementById('container').style.pointerEvents = 'auto';
                         },1000)
                          //Затираем наши значения для того что бы играть далее
                         numberTwo=numberOne=-1;
@@ -116,6 +118,7 @@ function startGame(count) {
 }
 
 function showCardBeforStart(){
+
     let cardsCollections = document.querySelectorAll('.card');
     cardsCollections.forEach(element => {
         element.children[0].style.transform = 'rotateY(180deg)';
@@ -132,8 +135,53 @@ function hideCardBeforStart(){
     });
 }
 
-// Зждесь надо написать внешниф функционал
-// создаю форму что бы пользователь сам мог добвать колличество пар в игре
+
+function createTimer(){
+    let timerDiv = document.createElement('div');
+    timerDiv.id = 'timerDiv';
+    let timerP = document.createElement('p');
+
+    timerDiv.append(timerP);
+    document.body.append(timerDiv);
+
+    let i = 60;// время для таймера
+    timerP.innerText = i;
+    const intervalId = setInterval(() => {
+        if(i<=0){
+            clearInterval(intervalId);
+            timerP.innerText = 0;
+            if((i==0) && (document.querySelectorAll('.card').length != document.querySelectorAll('.success').length)){
+                document.getElementById('container').style.pointerEvents = 'none';
+                document.getElementById('container').style.backgroundImage = 'url(https://mywishboard.com/thumbs/wish/q/y/i/600x0_edibzrnaanwnsfdn_jpg_b8f9.jpg)';
+                document.getElementById('container').style.height = '600px';
+                document.querySelector('.headerName').innerText = 'Вы проиграли!';
+            } 
+
+
+        }else{
+            timerP.innerText = i;
+            i--;
+        }
+    }, 1000);
+}
+
+
+function checkWin(){
+    if(document.querySelectorAll('.card').length == document.querySelectorAll('.success').length){
+        let cardCollection = document.querySelectorAll('.card');
+        cardCollection.forEach(element => {
+            element.style.transition = '2000ms';
+            element.style.transform = `translate(${Math.floor(Math.random()*400-Math.random()*400)}px,${Math.floor(Math.random()*400-Math.random()*400)}px)`;
+            document.getElementById('container').style.backgroundImage = 'url(https://www.meme-arsenal.com/memes/aeceb67bcbf5116ba00fa4f7f3e0ecc0.jpg)';
+            document.getElementById('container').style.height = '600px';
+            document.querySelector('.headerName').innerText = 'Вы выйграли!';
+            document.body.removeChild(document.getElementById('timerDiv'));
+         });
+    }
+
+}
+
+// Блок для старта игры Добавление уолличества пар
 function startFunctional(){
     let form = document.createElement('form');
     let input = document.createElement('input');
@@ -145,10 +193,11 @@ function startFunctional(){
     
     form.addEventListener('submit',(e)=>{
         e.preventDefault();
-        // Не работает удаление созданной ранее игры пишет ошибку
-        // if(document.getElementById('container')){
-        //     document.body.remove(document.getElementById('container'));
-        // }
+        // Очищаем от прошлой игры поле
+        if((document.getElementById('container')!=null)||(document.querySelectorAll('#container').length)){
+            document.body.removeChild(document.getElementById('container'));
+            document.body.removeChild(document.getElementById('timerDiv'));
+        }
         // numPair это число возможных пар для игры от 4 до 10, при вводе других значений будет 4
         let numPair = 4;
         if(input.value>10){
@@ -156,20 +205,36 @@ function startFunctional(){
         }else if( 4<input.value && input.value<=10 ){
             numPair=parseInt(input.value)+ parseInt(input.value)%2;
         }
+
         input.value = '';   
         startGame(numPair);
+        // Прокрутить к месту появления блоков
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            left: 0,
+            behavior: 'smooth'
+        });
+
+        // блок показывающий и скрыващий карточки для запоминания
+        document.getElementById('container').style.pointerEvents = 'none';
         setTimeout(() => {
             showCardBeforStart();
-        }, 1500);
+        }, 500);
         setTimeout(() => {
             hideCardBeforStart();
-        }, 3500);
+            document.getElementById('container').style.pointerEvents = 'auto';
+            createTimer();
+        }, 2500);
+
+        document.querySelector('.headerName').innerText = 'Игра в пары';
+
     })
+
+
 
     form.append(input);
     form.append(button);
     document.body.append(form);
-
 
 }
 
@@ -177,6 +242,7 @@ function startFunctional(){
 // Это функция cоздает заголовок с перещелкиванием (тестил CSS свойства просто)
 function headerCreation(){
     let headerName = document.querySelector('.headerName');
+    document.querySelector('.headerName').innerText = 'Игра в пары';
     let headerContainer = document.querySelector('.headerContainer');
     let flag=true;
 
@@ -195,5 +261,6 @@ function headerCreation(){
 document.addEventListener('DOMContentLoaded',()=>{
     startFunctional();
     headerCreation();
+    
 
 })
